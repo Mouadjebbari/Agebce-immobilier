@@ -22,7 +22,8 @@
                 </ul>
             </div>
             <form>
-                <button id="deposeButton" class="p-2 rounded-4 fw-bold" formaction="ajout.php">Deposer votre annonce</button>
+                <!-- <button id="deposeButton" class="p-2 rounded-4 fw-bold" formaction="ajout.php">Deposer votre annonce</button> -->
+                <button id="deposeButton" class="p-2 rounded-4 fw-bold" formaction="inscrii.php">INSECRIPTION</button>
             </form>
         </header>
         <div class="text text-center text-light p-5">
@@ -48,24 +49,32 @@
                         <option value="terrain">terrain</option>
                     </select>
                 </div>
+                <div>
+                    <select class="form-select" name="ville">
+                        <option selected>Ville</option>
+                        <option value="Tanger">Tanger</option>
+                        <option value="Tétouan">Tétouan</option>
+                        <option value="Hoceïma">Hoceïma</option>
+                        <option value="Assilah">Assilah</option>
+                        <option value="Chefchaouen">Chefchaouen</option>
+                    </select>
+                </div>
                 <div class="d-flex">
                     <h3 class="m-2">Prix :</h3>
                     <p class="m-2">Min</p>
-                    <input class="m-2" type="number" name="min">
+                    <input class="m-1" type="number" name="min" >
                     <p class="m-2">Max</p>
-                    <input class="m-2" type="number" name="max">
+                    <input class="m-1" type="number" name="max">
                     <input type="submit" name="Search" value="search" id="button">
                 </div>
             </div>
         </form>
     </section>
-    <main class="rounded p-4">
-                <div class="row">
+    <main class="d-flex flex-row justify-content-center flex-wrap" >
+                <div class="row" ></div>
                 <?php
                     require_once 'conexion.php';
-                    if($connexion->connect_error) {
-                        die('Connection failed: '. $connexion->connect_error);
-                        }
+                              
                                 if(isset($_POST["Search"]))
                                 {
                                     $Min = $_POST["min"];
@@ -73,9 +82,24 @@
                                     $categorie = $_POST["categorie"];
                                     $Search = "SELECT * FROM annonce WHERE prix BETWEEN '$Min' AND '$Max' AND categorie = '$categorie'";
                                     $response = $connexion->query($Search);
+                                    // VILLE
+                                    $ville = $_POST["ville"];
+                                    $Search = "SELECT * FROM annonce WHERE ville = '$ville'";
+                                    // MIN AND MAX
+                                    $Min = $_POST["min"];
+                                    $Max = $_POST["max"];
+                                    $Search = "SELECT * FROM annonce WHERE prix BETWEEN '$Min' AND '$Max'";
+                                    // TYPE
+                                    $Type = $_POST["type_annonce"];
+                                    $Search = "SELECT * FROM annonce WHERE type_annonce = '$Type'";
+                                    // CATEGORIE
+                                    $categorie = $_POST["categorie"];
+                                    $Search = "SELECT * FROM annonce WHERE categorie = '$categorie'";
+
                                     while ($champ = $response->fetch_assoc()) {
+
                                     echo " <div class='card col-md-3'>
-                                    
+                                    <img class='card-img-top' src='" .$champ['url_image_principal']. "' alt='Card image cap'>
                                     <div class='card-body'>
                                         <h5 class='card-title'>" . $champ["titre"] . "</h5>
                                         <p class='card-text'>" . $champ["categorie"] . "</p>
@@ -87,10 +111,10 @@
                                         <li class='list-group-item'>" . $champ["prix"] . "</li>
                                     </ul>
                                     <div class='card-body'>
-                                        <form action='index.php' method='post'>
-                                            <input type='hidden' name='Id' value=".$champ['id_annonce'].">
-                                            <button class='card-link btn btn-outline-success fw-bold' formaction='datails.php' name='datails'>datails</button>
-                                        </form>
+                                    <form action='datails.php' method='post'>
+                                    <input type='hidden' name='id_annonce' value=".$champ['id_annonce'].">
+                                    <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                                </form>
                                         </div>
                                         </div>";
                                         }      
@@ -100,7 +124,7 @@
                                     $result = $connexion->query($sql);
                                     while ($row = $result->fetch_assoc()) {
                                     echo " <div class='card col-md-3'>
-                                            <img class='card-img-top' src='images/" .$row['url_image_principal']. "' alt='Card image cap'>
+                                            <img class='card-img-top' src='" .$row['url_image_principal']. "' alt='Card image cap'>
                                             <div class='card-body'>
                                                 <h5 class='card-title'>" . $row["titre"] . "</h5>
                                                 <p class='card-text'>" . $row["categorie"] . "</p>
@@ -112,37 +136,38 @@
                                                 <li class='list-group-item'>" . $row["prix"] . "</li>
                                             </ul>
                                             <div class='card-body'>
-                                                <form action='index.php' method='post'>
-                                                    <input type='hidden' name='id_annonce' value=".$row['id_annonce'].">
-                                                    <button class='card-link btn btn-outline-success fw-bold' formaction='datails.php' name='datails'>datails</button>
-                                                </form>
+                                            <form action='datails.php' method='post'>
+                                            <input type='hidden' name='id_annonce' value=".$row['id_annonce'].">
+                                            <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                                        </form>
                                             </div>
                                         </div>";
                                     }
                                 }
                                 if (isset($_POST["Search"]))
                                 {
-                                    $categorie = $_POST["categorie"];
-                                    $Search = "SELECT * FROM annonce WHERE categorie = '$categorie'";
+                                    $ville = $_POST["ville"];
+                                    $Search = "SELECT * FROM annonce WHERE ville = '$ville'";
                                 $response = $connexion->query($Search);
-                                while ($champ = $response->fetch_assoc()) {
+                                while ($city = $response->fetch_assoc()) {
                                 echo " <div class='card col-md-3'>
+                                <img class='card-img-top' src='" .$city['url_image_principal']. "' alt='Card image cap'>
                                 
                                 <div class='card-body'>
-                                    <h5 class='card-title'>" . $champ["titre"] . "</h5>
-                                    <p class='card-text'>" . $champ["categorie"] . "</p>
+                                    <h5 class='card-title'>" . $city["titre"] . "</h5>
+                                    <p class='card-text'>" . $city["categorie"] . "</p>
                                 </div>
                                 <ul class='list-group list-group-flush'>
-                                    <li class='list-group-item'>" . $champ["type_annonce"] . "</li>
-                                    <li class='list-group-item'>" . $champ["supérficie"] . "</li>
-                                    <li class='list-group-item'>" . $champ["adresse"] . "</li>
-                                    <li class='list-group-item'>" . $champ["prix"] . "</li>
+                                    <li class='list-group-item'>" . $city["type_annonce"] . "</li>
+                                    <li class='list-group-item'>" . $city["supérficie"] . "</li>
+                                    <li class='list-group-item'>" . $city["adresse"] . "</li>
+                                    <li class='list-group-item'>" . $city["prix"] . "</li>
                                 </ul>
                                 <div class='card-body'>
-                                    <form action='index.php' method='post'>
-                                        <input type='hidden' name='Id' value=".$champ['id_annonce'].">
-                                        <button class='card-link btn btn-outline-success fw-bold' formaction='datails.php' name='datails'>datails</button>
-                                    </form>
+                                <form action='datails.php' method='post'>
+                                <input type='hidden' name='id_annonce' value=".$city['id_annonce'].">
+                                <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                            </form>
                                 </div>
                             </div>";
                             }
@@ -152,7 +177,7 @@
                             $result = $connexion->query($sql);
                             while ($row = $result->fetch_assoc()) {
                             echo " <div class='card col-md-3'>
-                                    <img class='card-img-top' src='images/" .$row['url_image_principal']. "' alt='Card image cap'>
+                                    <img class='card-img-top' src='" .$row['url_image_principal']. "' alt='Card image cap'>
                                     <div class='card-body'>
                                         <h5 class='card-title'>" . $row["titre"] . "</h5>
                                         <p class='card-text'>" . $row["categorie"] . "</p>
@@ -164,10 +189,10 @@
                                         <li class='list-group-item'>" . $row["prix"] . "</li>
                                     </ul>
                                     <div class='card-body'>
-                                        <form action='index.php' method='post'>
-                                            <input type='hidden' name='id_annonce' value=".$row['id_annonce'].">
-                                            <button class='card-link btn btn-outline-success fw-bold' formaction='datails.php' name='datails'>datails</button>
-                                        </form>
+                                    <form action='datails.php' method='post'>
+                                    <input type='hidden' name='id_annonce' value=".$row['id_annonce'].">
+                                    <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                                </form>
                                     </div>
                                 </div>";
                             }
@@ -179,24 +204,24 @@
                             $Max = $_POST["max"];
                         $Search = "SELECT * FROM annonce WHERE prix BETWEEN '$Min' AND '$Max'";
                         $response = $connexion->query($Search);
-                        while ($champ = $response->fetch_assoc()) {
+                        while ($champss = $response->fetch_assoc()) {
                         echo " <div class='card col-md-3'>
-                        
+                        <img class='card-img-top' src='" .$champss['url_image_principal']. "' alt='Card image cap'>
                         <div class='card-body'>
-                            <h5 class='card-title'>" . $champ["titre"] . "</h5>
-                            <p class='card-text'>" . $champ["categorie"] . "</p>
+                            <h5 class='card-title'>" . $champss["titre"] . "</h5>
+                            <p class='card-text'>" . $champss["categorie"] . "</p>
                         </div>
                         <ul class='list-group list-group-flush'>
-                            <li class='list-group-item'>" . $champ["type_annonce"] . "</li>
-                            <li class='list-group-item'>" . $champ["supérficie"] . "</li>
-                            <li class='list-group-item'>" . $champ["adresse"] . "</li>
-                            <li class='list-group-item'>" . $champ["prix"] . "</li>
+                            <li class='list-group-item'>" . $champss["type_annonce"] . "</li>
+                            <li class='list-group-item'>" . $champss["supérficie"] . "</li>
+                            <li class='list-group-item'>" . $champss["adresse"] . "</li>
+                            <li class='list-group-item'>" . $champss["prix"] . "</li>
                         </ul>
                         <div class='card-body'>
-                            <form action='index.php' method='post'>
-                                <input type='hidden' name='Id' value=".$champ['id_annonce'].">
-                                <button class='card-link btn btn-outline-success fw-bold' formaction='datails.php' name='datails'>datails</button>
-                            </form>
+                        <form action='datails.php' method='post'>
+                        <input type='hidden' name='id_annonce' value=".$champ['id_annonce'].">
+                        <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                    </form>
                         </div>
                     </div>";
                     }
@@ -206,7 +231,7 @@
                     $result = $connexion->query($sql);
                     while ($row = $result->fetch_assoc()) {
                     echo " <div class='card col-md-3'>
-                            <img class='card-img-top' src='images/" .$row['url_image_principal']. "' alt='Card image cap'>
+                            <img class='card-img-top' src='" .$row['url_image_principal']. "' alt='Card image cap'>
                             <div class='card-body'>
                                 <h5 class='card-title'>" . $row["titre"] . "</h5>
                                 <p class='card-text'>" . $row["categorie"] . "</p>
@@ -218,10 +243,10 @@
                                 <li class='list-group-item'>" . $row["prix"] . "</li>
                             </ul>
                             <div class='card-body'>
-                                <form action='index.php' method='post'>
-                                    <input type='hidden' name='id_annonce' value=".$row['id_annonce'].">
-                                    <button class='card-link btn btn-outline-success fw-bold' formaction='datails.php' name='datails'>datails</button>
-                                </form>
+                            <form action='datails.php' method='post'>
+                            <input type='hidden' name='id_annonce' value=".$row['id_annonce'].">
+                            <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                        </form>
                             </div>
                         </div>";
                     }
@@ -231,24 +256,24 @@
                     $Type = $_POST["type_annonce"];
                     $Search = "SELECT * FROM annonce WHERE type_annonce = '$Type'";
                     $response = $connexion->query($Search);
-                    while ($champ = $response->fetch_assoc()) {
+                    while ($champe = $response->fetch_assoc()) {
                     echo " <div class='card col-md-3'>
-                    
+                    <img class='card-img-top' src='" .$champe['url_image_principal']. "' alt='Card image cap'>
                     <div class='card-body'>
-                        <h5 class='card-title'>" . $champ["titre"] . "</h5>
-                        <p class='card-text'>" . $champ["categorie"] . "</p>
+                        <h5 class='card-title'>" . $champe["titre"] . "</h5>
+                        <p class='card-text'>" . $champe["categorie"] . "</p>
                     </div>
                     <ul class='list-group list-group-flush'>
-                        <li class='list-group-item'>" . $champ["type_annonce"] . "</li>
-                        <li class='list-group-item'>" . $champ["supérficie"] . "</li>
-                        <li class='list-group-item'>" . $champ["adresse"] . "</li>
-                        <li class='list-group-item'>" . $champ["prix"] . "</li>
+                        <li class='list-group-item'>" . $champe["type_annonce"] . "</li>
+                        <li class='list-group-item'>" . $champe["supérficie"] . "</li>
+                        <li class='list-group-item'>" . $champe["adresse"] . "</li>
+                        <li class='list-group-item'>" . $champe["prix"] . "</li>
                     </ul>
                     <div class='card-body'>
-                        <form action='index.php' method='post'>
-                            <input type='hidden' name='Id' value=".$champ['id_annonce'].">
-                            <button class='card-link btn btn-outline-success fw-bold' formaction='datails.php' name='datails'>datails</button>
-                        </form>
+                    <form action='datails.php' method='post'>
+                    <input type='hidden' name='id_annonce' value=".$champe['id_annonce'].">
+                    <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                </form>
                         </div>
                         </div>";
                         }      
@@ -258,7 +283,7 @@
                     $result = $connexion->query($sql);
                     while ($row = $result->fetch_assoc()) {
                     echo " <div class='card col-md-3'>
-                            <img class='card-img-top' src='images/" .$row['url_image_principal']. "' alt='Card image cap'>
+                            <img class='card-img-top' src='" .$row['url_image_principal']. "' alt='Card image cap'>
                             <div class='card-body'>
                                 <h5 class='card-title'>" . $row["titre"] . "</h5>
                                 <p class='card-text'>" . $row["categorie"] . "</p>
@@ -270,26 +295,70 @@
                                 <li class='list-group-item'>" . $row["prix"] . "</li>
                             </ul>
                             <div class='card-body'>
-                                <form action='index.php' method='post'>
+                                <form action='datails.php' method='post'>
                                     <input type='hidden' name='id_annonce' value=".$row['id_annonce'].">
-                                    <button class='card-link btn btn-outline-success fw-bold' formaction='datails.php' name='datails'>datails</button>
+                                    <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
                                 </form>
                             </div>
                         </div>";
                     }
                 }
-                if (isset($_POST['datails'])) {
-                    $id = $_POST['id_annonce'];
-                    $sql = "SELECT  FROM annonce WHERE id_annonce=$id";
-                    $result = $connexion->query($sql);
-                }
-                                // if (isset($_POST['delete'])) {
-                                //     $id = $_POST['id_annonce'];
-                                //     $sql = "DELETE FROM annonce WHERE id_annonce=$id";
-                                //     $result = $connexion->query($sql);
-                                // }
+                if (isset($_POST["Search"]))
+                                {
+                                    $categorie = $_POST["categorie"];
+                                    $Search = "SELECT * FROM annonce WHERE categorie = '$categorie'";
+                                $response = $connexion->query($Search);
+                                while ($champs = $response->fetch_assoc()) {
+                                echo " <div class='card col-md-3'>
+                                <img class='card-img-top' src='" .$champs['url_image_principal']. "' alt='Card image cap'>
+                                
+                                <div class='card-body'>
+                                    <h5 class='card-title'>" . $champs["titre"] . "</h5>
+                                    <p class='card-text'>" . $champs["categorie"] . "</p>
+                                </div>
+                                <ul class='list-group list-group-flush'>
+                                    <li class='list-group-item'>" . $champs["type_annonce"] . "</li>
+                                    <li class='list-group-item'>" . $champs["supérficie"] . "</li>
+                                    <li class='list-group-item'>" . $champs["adresse"] . "</li>
+                                    <li class='list-group-item'>" . $champs["prix"] . "</li>
+                                </ul>
+                                <div class='card-body'>
+                                <form action='datails.php' method='post'>
+                                <input type='hidden' name='id_annonce' value=".$champs['id_annonce'].">
+                                <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                            </form>
+                                </div>
+                            </div>";
+                            }
+                        }
+                        else {
+                            $sql = "SELECT * FROM annonce";
+                            $result = $connexion->query($sql);
+                            while ($row = $result->fetch_assoc()) {
+                            echo " <div class='card col-md-3'>
+                                    <img class='card-img-top' src='" .$row['url_image_principal']. "' alt='Card image cap'>
+                                    <div class='card-body'>
+                                        <h5 class='card-title'>" . $row["titre"] . "</h5>
+                                        <p class='card-text'>" . $row["categorie"] . "</p>
+                                    </div>
+                                    <ul class='list-group list-group-flush'>
+                                        <li class='list-group-item'>" . $row["type_annonce"] . "</li>
+                                        <li class='list-group-item'>" . $row["supérficie"] . "</li>
+                                        <li class='list-group-item'>" . $row["adresse"] . "</li>
+                                        <li class='list-group-item'>" . $row["prix"] . "</li>
+                                    </ul>
+                                    <div class='card-body'>
+                                    <form action='datails.php' method='post'>
+                                    <input type='hidden' name='id_annonce' value=".$row['id_annonce'].">
+                                    <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
+                                </form>
+                                    </div>
+                                </div>";
+                            }
+                        }
                 ?>
             </div>
+            
     </main>
     <!-- SCRIPTS -->
     <script src="script.js"></script>
