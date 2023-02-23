@@ -21,9 +21,9 @@
                     <li>HELP</li>
                 </ul>
             </div>
-            <form>
-                <!-- <button id="deposeButton" class="p-2 rounded-4 fw-bold" formaction="ajout.php">Deposer votre annonce</button> -->
-                <button id="deposeButton" class="p-2 rounded-4 fw-bold" formaction="inscrii.php">INSECRIPTION</button>
+            <form  action="signin.php">
+                
+                <button id="deposeButton" class="p-2 rounded-4 fw-bold"  formaction="signin.php">INSECRIPTION</button>
             </form>
         </header>
         <div class="text text-center text-light p-5">

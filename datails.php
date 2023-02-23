@@ -26,11 +26,6 @@ function enterPhoneNumber() {
 <?php
 
           // Define the URLs for the images
-      
-      
-  
-
-
                     require_once 'conexion.php';        
                         if (isset($_POST['datails'])) {
                           $id = $_POST['id_annonce'];

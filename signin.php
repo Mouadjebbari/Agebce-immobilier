@@ -1,34 +1,79 @@
 
-<?php
-if (isset($_POST['submit'])) {
-  $nom = $_POST['LeNom'];
-  $prenom = $_POST['LePrenom'];
-  $email = $_POST['email'];
-  $numero = $_POST['numero'];
-  $password = $_POST['password'];
-    $conn = mysqli_connect('localhost', 'root', '', 'db_annonce');
-    if ($conn->connect_error) {
-      die("Connection failed: " . $conn->connect_error);
-    }
+	<?php
+	if (isset($_POST['submit'])) {
+	$nom = $_POST['LeNom'];
+	$prenom = $_POST['LePrenom'];
+	$email = $_POST['email'];
+	$numero = $_POST['numero'];
+	$password = $_POST['password'];
+		$conn = mysqli_connect('localhost', 'root', '', 'db_annonce');
+		if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+		}
+		$sql = "INSERT INTO client (LePrenom,LeNom,email,numero,password) VALUES ('$prenom','$nom','$email','$numero','$password')";
+		if ($conn->query($sql) === TRUE) {
+		header("Refresh:0");
+		} else {
+		echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+		$conn->close();
+	}
+
+
+	//   verify sign in using email
+	
+	session_start(); // start session
+	
+	if (isset($_GET['sign_in'])) {
+	  $email = $_GET['email'];
+	  $password = $_GET['password'];
+	  
+	  $conn = mysqli_connect('localhost', 'root', '', 'db_annonce');
+	  if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	  }
+	
+	  $email = mysqli_real_escape_string($conn, $email); // sanitize input
+	
+	  $sql = "SELECT * FROM client WHERE email = '$email'";
+	  $result = mysqli_query($conn, $sql);
+	  
+	  if (mysqli_num_rows($result) > 0) {
+		$row = mysqli_fetch_assoc($result);
+		echo $row['password'];
+		if ($password == $row['password']) {
+		  // successful sign-in
+		  $_SESSION['id_client'] = $row['id'];
+		  header('Location: client.php');
+		  exit;
+		} else {
+		  // password doesn't match
+		  $error = "Invalid password.";
+		  echo  $error;
+		}
+	  } else {
+		// no row returned
+		$error = "Invalid email.";
+		echo  $error;
+
+	  }
+	  
+	  $conn->close();
+	}
 
 
 
 
 
-    $sql = "INSERT INTO client (LePrenom,LeNom,email,numero,password) VALUES ('$prenom','$nom','$email','$numero','$password')";
-    if ($conn->query($sql) === TRUE) {
-      header("Refresh:0");
-    } else {
-      echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-    $conn->close();
-  }
+
+
 
 ?>
 
+	
+	
 
-
-
+	
 
 
 
@@ -46,82 +91,48 @@ if (isset($_POST['submit'])) {
 
 </head>
 
-<body>
-<!-- <h1>Creer un compte</h1>
-<form  method="post">
-<div>
-<label for="nom">Nom</label>
-<input type="text" name="LeNom" id="nom" onkeyup="validNom()" >
-</div>
-<div>
-<label for="prenom">Prenom</label>
-<input type="text" name="LePrenom" id="prenom" onkeyup="validPrenom()">
-</div>
-<div>
-<label for="email">Email</label>
-<input type="email" name="email" id="email" onkeyup="validemail()" >
-</div>
-<div>
-<label for="pass">Le mot de pass</label>
-<input type="password" name="password" id="pass" onkeyup="validpass()">
-</div>
-<div>
-<label for="num"> Numero de telephone </label>
-<input type="number" name="numero" id="num" onkeyup= "validnumero()">
-</div>
-<button type="submit" name="submit">S'inscrire</button>
-</form> -->
-    
+	<body>
+			<div class="container" id="container">
+			<div class="form-container sign-up-container">
+				<form action="#" method="post">
+				<h1>Créer un compte</h1>
+				<input type="text" name="LeNom" id="nom" onkeyup="validNom()"  placeholder="Nom">
+				<input type="text" name="LePrenom" id="prenom" onkeyup="validPrenom()" placeholder="Prenom">
+				<input type="number" name="numero" id="num" onkeyup= "validnumero()" placeholder="Telephone">
+				<input type="email" name="email" id="email" onkeyup="validemail()" placeholder="Email">
+				<input type="password" name="password" id="pass" onkeyup="validpass()" placeholder="Password">				
+				<button type="submit" name="submit">S'inscrire</button>
+				</form>
+			</div>
+			<div class="form-container sign-in-container">
+			<form action="#" method="get">
+				<h1>Sign in</h1>
+				<span>ou utilisez votre compte</span>
+				<input type="email" placeholder="Email" name="email" />
+				<input type="password" placeholder="Password" name="password" />
+				<button type="submit" name="sign_in">S'inscrire</button>				
+				</form>
+			</div>
+			<div class="overlay-container">
+				<div class="overlay">
+				<div class="overlay-panel overlay-left">
+					<h1>Welcome Back!</h1>
+					<p>To stay connected with us, please log in with your personal information</p>
+					<button class="ghost" id="signIn">Sign In</button>
+				</div>
+				<div class="overlay-panel overlay-right">
+					<h1>Hello, Friend!</h1>
+					<p>Enter your personal details and start journey with us</p>
+					<button class="ghost" id="signUp">Sign Up</button>
+				</div>
+				</div>
+			</div>
+			</div>
 
+			
 
-
-
-
-
-        
-        <div class="container" id="container">
-          <div class="form-container sign-up-container">
-            <form action="#" method="post">
-              <h1>Créer un compte</h1>
-              <input type="text" name="LeNom" id="nom" onkeyup="validNom()"  placeholder="Nom">
-              <input type="text" name="LePrenom" id="prenom" onkeyup="validPrenom()" placeholder="Prenom">
-              <input type="number" name="numero" id="num" onkeyup= "validnumero()" placeholder="Telephone">
-              <input type="email" name="email" id="email" onkeyup="validemail()" placeholder="Email">
-              <input type="password" name="password" id="pass" onkeyup="validpass()" placeholder="Password">
-              
-              <button type="submit" name="submit">S'inscrire</button>
-            </form>
-          </div>
-          <div class="form-container sign-in-container">
-            <form action="#">
-              <h1>Sign in</h1>
-              
-              <span>ou utilisez votre compte</span>
-              <input type="email" placeholder="Email" />
-              <input type="password" placeholder="Password" />
-              <button type="submit" name="submit">S'inscrire</button>
-            </form>
-          </div>
-          <div class="overlay-container">
-            <div class="overlay">
-              <div class="overlay-panel overlay-left">
-                <h1>Welcome Back!</h1>
-                <p>Pour rester connecté avec nous, veuillez vous connecter avec vos informations personnelles</p>
-                <button class="ghost" id="signIn">Sign In</button>
-              </div>
-              <div class="overlay-panel overlay-right">
-                <h1>Hello, Friend!</h1>
-                <p>Entrez vos données personnelles et commencez votre voyage avec nous</p>
-                <button class="ghost" id="signUp">Sign Up</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        
-
-    <style>
-      
+		<style>
+		
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
 * {
@@ -376,7 +387,7 @@ footer a {
     </style>
 
 
-<script src="inscrii.js" > </script>
+<script src="sign.js" > </script>
 </body>
 </html>
 

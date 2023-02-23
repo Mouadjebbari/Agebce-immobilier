@@ -21,32 +21,61 @@
                             <form class="px-md-2" method="POST">
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="form3Example1q">Titre</label>
-                                    <input type="text" id="form3Example1q" class="form-control" name="Titre" />
+                                    <input type="text" id="form3Example1q" class="form-control" name="titre" />
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="form3Example1q">Image</label>
-                                    <input type="file" id="form3Example1q" class="form-control" name="Image" />
+                                    <label class="form-label" for="form3Example1q">Image principale</label>
+                                    <input type="file" id="form3Example1q" class="form-control" name="url_image_principal" />
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="form3Example1q">Description</label>
-                                    <input type="text" id="form3Example1q" class="form-control" style="height: 15vh;" name="Description" placeholder="Minimum 10 characters.."/>
+                                    <label class="form-label" for="form3Example1q">Image 2</label>
+                                    <input type="file" id="form3Example1q" class="form-control" name="url_image1" />
                                 </div>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="form3Example1q">Superficie</label>
-                                    <input type="text" id="form3Example1q" class="form-control" name="Superficie" />
+                                    <input type="text" id="form3Example1q" class="form-control" name="supérficie" />
                                 </div>
                                 <div class="form-outline mb-4">
                                     <label class="form-label" for="form3Example1q">Adresse</label>
-                                    <input type="text" id="form3Example1q" class="form-control" name="Adresse" />
+                                    <input type="text" id="form3Example1q" class="form-control" name="adresse" />
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="form3Example1q">Montant</label>
-                                    <input type="text" id="form3Example1q" class="form-control" name="Montant" />
+                                    <label class="form-label" for="form3Example1q">Prix</label>
+                                    <input type="text" id="form3Example1q" class="form-control" name="prix" />
+                                </div>
+                                <div>
+                                <select class="form-select" name="type_annonce">
+                                    <option selected>Type annonce</option>
+                                    <option value="appartement">appartement</option>
+                                    <option value="maison">maison</option>
+                                    <option value="villa">villa</option>
+                                    <option value="bureau">bureau</option>
+                                    <option value="terrain">terrain</option>
+                                </select>
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <label class="form-label" for="form3Example1q">Type annonce</label>
-                                    <input type="text" id="form3Example1q" class="form-control" name="Type_an" />
+                                    <label class="form-label" for="form3Example1q">Date de publication</label>
+                                    <input type="date" id="form3Example1q" class="form-control" name="date_publication" />
                                 </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="form3Example1q">Date de modification</label>
+                                    <input type="date" id="form3Example1q" class="form-control" name="date_modification" />
+                                </div>
+                                <select class="form-select" name="ville">
+                                    <option selected>Ville</option>
+                                    <option value="appartement">Tanger</option>
+                                    <option value="maison">Al Hoceima</option>
+                                    <option value="villa">L'Arache</option>
+                                    <option value="bureau">Asilah</option>
+                                    <option value="terrain">Tetouan</option>
+                                </select>
+                                <Br></Br>
+                                <select class="form-select" name="categorie">
+                                    <option selected>Categorie</option>
+                                    <option value="Location">Location</option>
+                                    <option value="Vente">Vente</option>
+                                </select>
+                                <Br></Br>
                                 <button type="submit" name="insert" class="btn btn-outline-success bg-light fw-bold">Submit</button>
                             </form>
                         </div>
@@ -56,25 +85,29 @@
         </div>
     </section>
     <?php
-
+    session_start();
     require_once 'conexion.php';
 
     if (isset($_POST['insert'])) {
+        $id_client = $_SESSION["id_client"];
+        $Titre = $_POST['titre'];
+        $Image = $_FILES['url_image_principal'];
+        $Image2 = $_FILES['url_image1'];
+        $Superficie = $_POST['supérficie'];
+        $Adresse = $_POST['adresse'];
+        $Prix = $_POST['prix'];
+        $Type_an = $_POST['type_annonce'];
+        $Date_publication = $_POST['date_publication'];
+        $Date_modification = $_POST['date_modification'];
+        $Ville = $_POST['ville'];
+        $Categorie = $_POST['categorie'];
 
-        $Titre = $_POST['Titre'];
-        $Image = $_POST['Image'];
-        $Description = $_POST['Description'];
-        $Superficie = $_POST['Superficie'];
-        $Adresse = $_POST['Adresse'];
-        $Montant = $_POST['Montant'];
-        $Type_an = $_POST['Type_an'];
         
-
-        $sql = "INSERT INTO annonce (Titre, Image, Description, Superficie,  Adresse,  Montant,  Type_an) VALUES ('$Titre','$Image','$Description' ,'$Superficie' ,'$Adresse' ,'$Montant' ,'$Type_an')";
-        $result = mysqli_query($connexion, $sql);
-
+        $sql = "INSERT INTO annonce (titre, prix, date_publication, date_modification,  adresse,  ville,  categorie, type_annonce, url_image_principal, url_image ) VALUES ('$Titre','$Prix','$Date_publication' ,'$Date_modification' ,'$Adresse' ,'$Ville' ,'$Categorie', '$Type_an', '$Image', ' $Image2' )";
+        if ($conn->query($sql) != FALSE ) {
+            $id_annonce = $conn->lastInsertId();
         if($result){
-            header("location:index.php");
+            header("location:client.php");
         }else {
             echo "insertion echeo";
         }
