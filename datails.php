@@ -10,16 +10,7 @@
 </head>
 <body>
 
-<!-- <input type="tel" id="phone" name="phone" placeholder="Enter phone number">
-<button onclick="enterPhoneNumber()">Enter Number</button>
 
-<script>
-function enterPhoneNumber() {
-  var phone = document.getElementById("phone").value;
-  alert("Phone number entered: " + phone);
-  // You can replace the alert with your own code to process the entered phone number
-}
-</script> -->
 
  <section class="datails_section"> 
 
@@ -78,17 +69,18 @@ function enterPhoneNumber() {
                                       </div>
                                   </div>";
                                   }
-                                  }       
+                                  }     
+                                  
                                   
                             ?>
 
-    
+</section> 
 <style>
     
-    .list-group,
+ .list-group,
 .list-group-item {
   font-family: 'Roboto', sans-serif;
-  color: wheat;
+  color: black;
 }
 
 ul {
@@ -96,6 +88,7 @@ ul {
     flex-direction: column;
     align-items: center;
     padding: 0;
+    
   }
   
   li {
@@ -104,7 +97,7 @@ ul {
     max-width: 400px;
     margin-bottom: 10px;
     text-align: center;
-   color: white;
+   
   }
   
 .datails_section{
@@ -171,5 +164,5 @@ ul {
 
 </style>
     <script src="script.js"></script>
-    </section>  
+     
     </body>

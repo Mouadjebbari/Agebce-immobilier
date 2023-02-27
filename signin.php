@@ -43,7 +43,8 @@
 		echo $row['password'];
 		if ($password == $row['password']) {
 		  // successful sign-in
-		  $_SESSION['id_client'] = $row['id'];
+		  $_SESSION['id_client'] = $row['id_client'];
+
 		  header('Location: client.php');
 		  exit;
 		} else {

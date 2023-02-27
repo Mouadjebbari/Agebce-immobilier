@@ -60,15 +60,15 @@
 
     if(isset($_POST['edit'])) {
 
-        $Titre = $_POST['Titre'];
+        $Titre = $_POST['titre'];
         $Image = $_POST['Image'];
-        $Description = $_POST['Description'];
-        $Superficie = $_POST['Superficie'];
-        $Adresse = $_POST['Adresse'];
-        $Montant = $_POST['Montant'];
+        $Description = $_POST['categorie'];
+        $Superficie = $_POST['supérficie'];
+        $Adresse = $_POST['adresse'];
+        $Montant = $_POST['prix'];
         $Type_an = $_POST['Type_an'];
         
-        $sql = "UPDATE annonce SET Titre='$Titre',Image='$Image',Description='$Description',Superficie='$Superficie',Adresse='$Adresse',Montant='$Montant',Type_an='$Type_an'";
+        $sql = "UPDATE annonce SET titre='$Titre',Image='$Image',Description='$Description',supérficie='$Superficie',adresse='$Adresse',prix='$Montant',Type_an='$Type_an'";
         $result = mysqli_query($connexion, $sql);
 
         if($result){

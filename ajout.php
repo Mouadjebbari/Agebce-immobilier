@@ -43,24 +43,14 @@
                                     <label class="form-label" for="form3Example1q">Prix</label>
                                     <input type="text" id="form3Example1q" class="form-control" name="prix" />
                                 </div>
-                                <div>
                                 <select class="form-select" name="type_annonce">
-                                    <option selected>Type annonce</option>
+                                    <option selected>type annonce</option>
                                     <option value="appartement">appartement</option>
                                     <option value="maison">maison</option>
                                     <option value="villa">villa</option>
                                     <option value="bureau">bureau</option>
                                     <option value="terrain">terrain</option>
-                                </select>
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="form3Example1q">Date de publication</label>
-                                    <input type="date" id="form3Example1q" class="form-control" name="date_publication" />
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="form3Example1q">Date de modification</label>
-                                    <input type="date" id="form3Example1q" class="form-control" name="date_modification" />
-                                </div>
+                                </select> <br>
                                 <select class="form-select" name="ville">
                                     <option selected>Ville</option>
                                     <option value="appartement">Tanger</option>
@@ -68,14 +58,12 @@
                                     <option value="villa">L'Arache</option>
                                     <option value="bureau">Asilah</option>
                                     <option value="terrain">Tetouan</option>
-                                </select>
-                                <Br></Br>
+                                </select><br>
                                 <select class="form-select" name="categorie">
                                     <option selected>Categorie</option>
                                     <option value="Location">Location</option>
                                     <option value="Vente">Vente</option>
-                                </select>
-                                <Br></Br>
+                                </select> <br>
                                 <button type="submit" name="insert" class="btn btn-outline-success bg-light fw-bold">Submit</button>
                             </form>
                         </div>
@@ -85,33 +73,34 @@
         </div>
     </section>
     <?php
-    session_start();
-    require_once 'conexion.php';
 
+    require_once 'conexion.php';
+        session_start();
     if (isset($_POST['insert'])) {
-        $id_client = $_SESSION["id_client"];
+        $id_client=$_SESSION['id_client']; 
         $Titre = $_POST['titre'];
-        $Image = $_FILES['url_image_principal'];
+        $Image = $_FILES['url_image_principal']['name'];
+        $tmp_name=$_FILES['url_image_principal']['tmp_name'];
         $Image2 = $_FILES['url_image1'];
+        $FOLDER="images".$Image;
+        move_uploaded_file($tmp_name,$FOLDER);
         $Superficie = $_POST['supérficie'];
         $Adresse = $_POST['adresse'];
         $Prix = $_POST['prix'];
-        $Type_an = $_POST['type_annonce'];
-        $Date_publication = $_POST['date_publication'];
-        $Date_modification = $_POST['date_modification'];
+        $Type_an = $_POST['type_annonce'];  
         $Ville = $_POST['ville'];
         $Categorie = $_POST['categorie'];
 
-        
-        $sql = "INSERT INTO annonce (titre, prix, date_publication, date_modification,  adresse,  ville,  categorie, type_annonce, url_image_principal, url_image ) VALUES ('$Titre','$Prix','$Date_publication' ,'$Date_modification' ,'$Adresse' ,'$Ville' ,'$Categorie', '$Type_an', '$Image', ' $Image2' )";
-        if ($conn->query($sql) != FALSE ) {
-            $id_annonce = $conn->lastInsertId();
+        $sql = "INSERT INTO annonce (id_client,titre, prix, date_publication, date_modification,  adresse,  ville,  categorie, type_annonce, url_image_principal, url_image ) VALUES ('$id_client','$Titre','$Prix',NOW() ,NOW(),'$Adresse' ,'$Ville' ,'$Categorie', '$Type_an', '$FOLDER', ' $Image2' )";
+        $result = mysqli_query($connexion, $sql);
+
         if($result){
             header("location:client.php");
         }else {
             echo "insertion echeo";
         }
     }
+            
     ?>
 </body>
 </html>

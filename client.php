@@ -82,33 +82,42 @@
                             die("Connection failed: " . $conn->connect_error);
                         }
                         $sql = "SELECT * FROM annonce WHERE id_client = '$id_client'";
-                        $result = mysqli_query($conn, $sql);     
-                        while ($row = mysqli_fetch_assoc($result)) {                               
-                                        echo " <div class='card col-md-3'>
-                                        <img class='card-img-top' src='" .$row['url_image_principal']. "' alt='Card image cap'>
-                                        <div class='card-body'>
-                                            <h5 class='card-title'>" . $row["titre"] . "</h5>
-                                            <p class='card-text'>" . $row["categorie"] . "</p>
-                                        </div>
-                                        <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item'>" . $row["type_annonce"] . "</li>
-                                            <li class='list-group-item'>" . $row["supérficie"] . "</li>
-                                            <li class='list-group-item'>" . $row["adresse"] . "</li>
-                                            <li class='list-group-item'>" . $row["prix"] . "</li>
-                                        </ul>
-                                        <div class='card-body'>
-                                        <form action='datails.php' method='post'>
-                                        <input type='hidden' name='id_client' value=".$row['id_client'].">
-                                        <button class='card-link btn btn-outline-success fw-bold' onclick='update.php' name='edit' value=".$row['id_client'].">Update</button>
-                                        <button class='card-link btn btn-outline-danger fw-bold' type='submit' name='delete'>Delete</button>
-                                        <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit'>Datails</button>
-                                    </form>
-                                        </div>
-                                    </div>";
+                        $result = mysqli_query($conn, $sql);
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo " <div class='card col-md-3'>
+                            <img class='card-img-top' src='" . $row['url_image_principal'] . "' alt='Card image cap'>
+                            <div class='card-body'>
+                                <h5 class='card-title'>" . $row["titre"] . "</h5>
+                                <p class='card-text'>" . $row["categorie"] . "</p>
+                            </div>
+                            <ul class='list-group list-group-flush'>
+                                <li class='list-group-item'>" . $row["type_annonce"] . "</li>
+                                <li class='list-group-item'>" . $row["supérficie"] . "</li>
+                                <li class='list-group-item'>" . $row["adresse"] . "</li>
+                                <li class='list-group-item'>" . $row["prix"] . "</li>
+                            </ul>
+                            <div class='card-body'>
+                            <form  method='post'>
+                            <input type='hidden' name='id_annonce' value=" . $row['id_annonce'] . ">
+                            <button class='card-link btn btn-outline-success fw-bold' formaction='update.php'    name='edit' value=" . $row['id_client'] . ">Update</button>
+                            <button class='card-link btn btn-outline-danger fw-bold' type='submit' name='delete'>Delete</button>
+                            <button class='card-link btn btn-outline-success fw-bold' name='datails' type='submit' formaction='datails.php'>Datails</button>
+                            </form>
+                            </div>
+                            </div>";
+                            
+                            
+                            
                         }
-                        
-                        $conn->close();
                     }
+                    
+                    if (isset($_POST['delete'])) {
+                        $id = $_POST['id_annonce'];
+                        $sql = "DELETE FROM annonce WHERE id_annonce=$id";
+                        $result = $conn->query($sql);
+                    }
+                        $conn->close();
+                        
                         ?>
             </div>
             
